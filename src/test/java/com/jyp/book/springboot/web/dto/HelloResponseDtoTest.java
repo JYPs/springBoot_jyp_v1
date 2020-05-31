@@ -34,7 +34,7 @@ public class HelloResponseDtoTest {
 *
 * 2)
 * isEqualTo
-* assertj의 동등 비굑 메서드
+* assertj의 동등 비교 메서드
 *
 *
 * */
