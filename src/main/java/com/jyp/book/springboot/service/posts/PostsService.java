@@ -2,13 +2,16 @@ package com.jyp.book.springboot.service.posts;
 
 import com.jyp.book.springboot.domain.posts.Posts;
 import com.jyp.book.springboot.domain.posts.PostsRespository;
+import com.jyp.book.springboot.web.dto.PostsListResponseDto;
 import com.jyp.book.springboot.web.dto.PostsResponseDto;
 import com.jyp.book.springboot.web.dto.PostsSaveRequestDto;
 import com.jyp.book.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor // ---> 생성자!!!, final이 선언된 ㅣ모든 필드를 인자값으로 하는 생성자를 롬복이 대신 생성해줌
 @Service
@@ -31,6 +34,13 @@ public class PostsService {
         Posts entity = postsRespository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id="+ id));
         return new PostsResponseDto(entity);
     }
+
+    @Transactional(readOnly = true) //3)
+    public List<PostsListResponseDto> findAllDesc() {
+        return postsRespository.findAllDesc().stream()
+                .map(PostsListResponseDto::new) //2)
+                .collect(Collectors.toList());
+    }
 }
 /* 스프링에서 Bean을 주입받는 방식 ==> @Autowired, setter, 생성자
 *   가장 적합한 방식은 생성자로 주입받는 방식이다.
@@ -45,3 +55,10 @@ public class PostsService {
     ==> 이 개념을 더티 체킹(dirty checking) 이라 한다
 *
 *  */
+/*2)
+* .map(PostsListResponseDto::new) == .map(posts -> new PostsListResponseDto(posts))
+* postsRepository 결과로 넘어온 Posts의 Stream을 map을 통해 PostsListResponseDto 변환 -> List로 반환하는 메소드임
+*
+* 3)readOnly = true
+* 트랜잭션 범위는 유지하되, 조회 기능만 남겨두어 조회 속도가 개선되기 때문에 등록, 수정, 삭제 기능이 전혀 없는 서비스 메소드에서 사용하는것!
+* */
