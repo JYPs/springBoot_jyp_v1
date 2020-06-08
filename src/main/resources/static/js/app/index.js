@@ -34,9 +34,10 @@ var main = {
             content: $('#content').val()
         };
 
+        var id = $('#id').val();
         $.ajax({
             type: 'PUT', // 1)
-            url: '/api/v1/posts' + id, // 어느 게시글을 수정할지 URL Path로 구분하기 위해 Path에 id를 추가한다
+            url: '/api/v1/posts/' + id, // 어느 게시글을 수정할지 URL Path로 구분하기 위해 Path에 id를 추가한다
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -46,7 +47,7 @@ var main = {
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
-    }
+    },
 };
 
 main.init();
