@@ -22,7 +22,7 @@
             {{#posts}}
                 <tr>
                     <td>{{id}}</td>
-                    <td>{{title}}</td>
+                    <td><a href="/posts/update/{{id}}">{{title}}</a></td> <!-- 1) -->
                     <td>{{author}}</td>
                     <td>{{modifiedDate}}</td>
                 </tr>
@@ -31,3 +31,8 @@
         </table>
     </div>
 {{>layout/footer}}
+<!--
+1) <a href="/posts/update/id"
+타이틀(title)에 a tag를 추가한다
+타이틀을 클릭하면 해당 게시글의 수정 화면으로 이동
+-->
