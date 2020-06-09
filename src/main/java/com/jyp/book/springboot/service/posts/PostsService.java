@@ -41,6 +41,12 @@ public class PostsService {
                 .map(PostsListResponseDto::new) //2)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void delete (Long id) {
+        Posts posts = postsRespository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id="+id));
+        postsRespository.delete(posts); //4)
+    }
 }
 /* 스프링에서 Bean을 주입받는 방식 ==> @Autowired, setter, 생성자
 *   가장 적합한 방식은 생성자로 주입받는 방식이다.
@@ -61,4 +67,11 @@ public class PostsService {
 *
 * 3)readOnly = true
 * 트랜잭션 범위는 유지하되, 조회 기능만 남겨두어 조회 속도가 개선되기 때문에 등록, 수정, 삭제 기능이 전혀 없는 서비스 메소드에서 사용하는것!
+* */
+
+/*
+* 4)postsRepository.delete(posts)
+* JpaRepository에서 이미 delete 메소드를 지원하고 있으니 이를 활용함
+* 엔티티를 파라미터로 삭제할 수도 있고, deleteByid 메소드를 이용하면 id로 삭제할 수도 있다
+* 존재하는 Posts인지 확인을 위해 엔티티 조회 후 그대로 삭제한다.
 * */
